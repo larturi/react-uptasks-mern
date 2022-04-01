@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Alert from '../components/Alert';
 
 const Register = () => {
@@ -10,7 +11,7 @@ const Register = () => {
   const [password2, setPassword2] = useState('');
   const [alerta, setAlerta] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if([nombre, email, password, password2].includes('')) {
@@ -38,6 +39,14 @@ const Register = () => {
     }
 
     setAlerta({});
+
+    // Enviar el registro
+    try {
+      const response = await axios.post('http://localhost:4000/api/users', { nombre, email, password });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const { msg } = alerta;
