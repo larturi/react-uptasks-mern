@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const login = () => {
+const Login = () => {
   return (
     <>
-      <h1 className='text-sky-600 font-black text-5xl'>
+      <h1 className='text-sky-600 font-black text-3xl uppercase text-center'>
         Inicia sesión y administra tus <span className='text-slate-700'>proyectos</span>
       </h1>
 
@@ -41,8 +42,19 @@ const login = () => {
         />
 
       </form>
+
+      <nav className='lg:flex lg:justify-between'>
+        <Link 
+          to="/register"
+          className='block text-center my-5 text-slate uppercase text-sm'
+        >¿No tienes una cuenta? Registrar</Link>
+        <Link 
+          to="/forget-password"
+          className='block text-center my-5 text-slate uppercase text-sm'
+        >Olvidé mi password</Link>
+      </nav>
     </>
   )
 }
 
-export default login;
+export default Login;
