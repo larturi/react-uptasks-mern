@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Alert from '../components/Alert';
+import { data } from 'autoprefixer';
 
 const Register = () => {
 
@@ -42,10 +43,16 @@ const Register = () => {
 
     // Enviar el registro
     try {
-      const response = await axios.post('http://localhost:4000/api/users', { nombre, email, password });
-      console.log(response);
+      const { data } = await axios.post('http://localhost:4000/api/users', { nombre, email, password });
+      setAlerta({
+        error: false,
+        msg: 'Ususario registrado con exito'
+      });
     } catch (error) {
-      console.error(error);
+      setAlerta({
+        error: true,
+        msg: error.response.data.msg
+      });
     }
   }
 
