@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Alert from '../components/Alert';
 
 const ForgetPassword = () => {
@@ -7,7 +8,7 @@ const ForgetPassword = () => {
   const [email, setEmail] = useState('');
   const [alerta, setAlerta] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setAlerta({});
@@ -19,8 +20,26 @@ const ForgetPassword = () => {
         msg: 'Email inválido'
       });
       return;
-    } else {
-      setAlerta({});
+    }
+
+    // Send email to server
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/recovery-password`, {
+        email
+      });
+
+      setAlerta({
+        error: false,
+        msg: 'Hemos enviado un email con instrucciones'
+      });
+
+      console.log(data);
+    } catch (error) {
+      setAlerta({
+        error: true,
+        msg: 'Error al enviar el email'
+      });
+      return;
     }
   }
 
