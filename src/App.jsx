@@ -6,21 +6,30 @@ import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import ConfirmAccount from './pages/ConfirmAccount';
 
-function App() {
+import { AuthProvider } from './context/AuthProvider';
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AuthLayout />}>
-          <Route index element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="forget-password" element={<ForgetPassword />} />
-          <Route path="forget-password/:token" element={<ChangePassword />} />
-          <Route path="confirm-account/:token" element={<ConfirmAccount />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
+function App() {
+   return (
+      <BrowserRouter>
+         <AuthProvider>
+            <Routes>
+               <Route path='/' element={<AuthLayout />}>
+                  <Route index element={<Login />} />
+                  <Route path='register' element={<Register />} />
+                  <Route path='forget-password' element={<ForgetPassword />} />
+                  <Route
+                     path='forget-password/:token'
+                     element={<ChangePassword />}
+                  />
+                  <Route
+                     path='confirm-account/:token'
+                     element={<ConfirmAccount />}
+                  />
+               </Route>
+            </Routes>
+         </AuthProvider>
+      </BrowserRouter>
+   );
 }
 
-export default App
+export default App;

@@ -31,8 +31,6 @@ const ForgetPassword = () => {
             error: false,
             msg: 'Hemos enviado un email con instrucciones',
          });
-
-         console.log(data);
       } catch (error) {
          setAlerta({
             error: true,
