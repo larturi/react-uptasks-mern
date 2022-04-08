@@ -1,17 +1,21 @@
 import { useState, useEffect, createContext } from 'react';
-import clienteAxios from '../config/clienteAxios';
+import { useNavigate } from 'react-router-dom';
+import clientAxios from '../config/clientAxios';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
    const [auth, setAuth] = useState({});
+   const [loading, setLoading] = useState(true);
 
+   const navigate = useNavigate();
    useEffect(() => {
-      const autenticarUsuario = async () => {
-         // Comprueba si hay un token en localStorage
+      const authenticateUser = async () => {
+         // Check if there is a token in localStorage
          const token = localStorage.getItem('token');
 
          if (!token) {
+            setLoading(false);
             return;
          }
 
@@ -22,20 +26,25 @@ const AuthProvider = ({ children }) => {
             },
          };
 
-         // Si hay un token, pide info del usuario al backend
+         // If the token is there, get the user info
          try {
-            const { data } = await clienteAxios.get('/users/profile', config);
+            const { data } = await clientAxios.get('/users/profile', config);
             setAuth(data);
+            navigate('/projects');
          } catch (error) {
+            setAuth({});
             console.log(error);
          }
+         setLoading(false);
       };
-      autenticarUsuario();
+      authenticateUser();
    }, []);
 
    return (
       <AuthContext.Provider
          value={{
+            auth,
+            loading,
             setAuth,
          }}
       >

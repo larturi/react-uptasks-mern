@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Alert from '../components/Alert';
-import clienteAxios from '../config/clienteAxios';
+import clientAxios from '../config/clientAxios';
 import useAuth from '../hooks/useAuth';
 
 const Login = () => {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [alerta, setAlerta] = useState({});
+   const [alert, setAlert] = useState({});
 
    const { setAuth } = useAuth();
 
@@ -15,39 +15,39 @@ const Login = () => {
       e.preventDefault();
 
       if ([email, password].includes('')) {
-         setAlerta({
-            msg: 'Todos los campos son obligatorios',
+         setAlert({
+            msg: 'All fields are required',
             error: true,
          });
          return;
       }
 
       try {
-         const { data } = await clienteAxios.post('/users/login', {
+         const { data } = await clientAxios.post('/users/login', {
             email,
             password,
          });
          localStorage.setItem('token', data.token);
          setAuth(data);
-         setAlerta({});
+         setAlert({});
       } catch (error) {
-         setAlerta({
+         setAlert({
             msg: error.response.data.msg,
             error: true,
          });
       }
    };
 
-   const { msg } = alerta;
+   const { msg } = alert;
 
    return (
       <>
          <h1 className='text-sky-600 font-black text-3xl uppercase text-center'>
-            Inicia sesión y administra tus{' '}
-            <span className='text-slate-700'>proyectos</span>
+            Sign In and manage your{' '}
+            <span className='text-slate-700'>projects</span>
          </h1>
 
-         {msg && <Alert alert={alerta} />}
+         {msg && <Alert alert={alert} />}
 
          <form
             className='my-10 bg-white shadow rounded-lg p-10'
@@ -89,7 +89,7 @@ const Login = () => {
 
             <input
                type='submit'
-               value='Iniciar Sesión'
+               value='Sign In'
                className='w-full mb-5 mt-5 p-3 bg-sky-600 text-white uppercase font-bold rounded-md hover:cursor-pointer hover:bg-sky-800 transition-color duration-300 ease-in-out'
             />
          </form>
@@ -99,13 +99,13 @@ const Login = () => {
                to='/register'
                className='block text-center my-5 text-slate uppercase text-sm'
             >
-               ¿No tienes una cuenta? Registrar
+               ¿Do you have not an account? Sign Up
             </Link>
             <Link
                to='/forget-password'
                className='block text-center my-5 text-slate uppercase text-sm'
             >
-               Olvidé mi password
+               I forgot my password
             </Link>
          </nav>
       </>

@@ -5,6 +5,9 @@ import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import ConfirmAccount from './pages/ConfirmAccount';
+import ProtectedRoutes from './layouts/ProtectedRoutes';
+import Projects from './pages/Projects';
+import NewProject from './pages/NewProject';
 
 import { AuthProvider } from './context/AuthProvider';
 
@@ -25,6 +28,11 @@ function App() {
                      path='confirm-account/:token'
                      element={<ConfirmAccount />}
                   />
+               </Route>
+
+               <Route path='/projects' element={<ProtectedRoutes />}>
+                  <Route index element={<Projects />} />
+                  <Route path='create-project' element={<NewProject />}></Route>
                </Route>
             </Routes>
          </AuthProvider>

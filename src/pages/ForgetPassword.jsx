@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import clienteAxios from '../config/clienteAxios';
+import clientAxios from '../config/clientAxios';
 import Alert from '../components/Alert';
 
 const ForgetPassword = () => {
@@ -23,7 +23,7 @@ const ForgetPassword = () => {
 
       // Send email to server
       try {
-         const { data } = await clienteAxios.post(`/users/recovery-password`, {
+         const { data } = await clientAxios.post(`/users/recovery-password`, {
             email,
          });
 

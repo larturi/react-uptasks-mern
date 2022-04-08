@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Alert from '../components/Alert';
-import clienteAxios from '../config/clienteAxios';
+import clientAxios from '../config/clientAxios';
 
 const Register = () => {
    const [nombre, setNombre] = useState('');
@@ -41,7 +41,7 @@ const Register = () => {
 
       // Enviar el registro
       try {
-         const { data } = await clienteAxios.post('/users', {
+         const { data } = await clientAxios.post('/users', {
             nombre,
             email,
             password,
