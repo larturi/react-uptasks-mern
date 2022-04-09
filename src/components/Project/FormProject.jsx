@@ -1,12 +1,43 @@
 import React, { useState } from 'react';
+import useProjects from '../../hooks/useProjects';
+import Alert from '../Alert';
 
 const FormProject = () => {
    const [nombre, setNombre] = useState('');
    const [descripcion, setDescripcion] = useState('');
    const [fechaEntrega, setFechaEntrega] = useState('');
    const [cliente, setCliente] = useState('');
+
+   const { alerta, mostrarAlerta, submitProject } = useProjects();
+
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      if ([nombre, descripcion, fechaEntrega, cliente].includes('')) {
+         mostrarAlerta({
+            msg: 'Todos los campos son obligatorios',
+            error: true,
+         });
+         return;
+      }
+
+      await submitProject({ nombre, descripcion, fechaEntrega, cliente });
+
+      setNombre('');
+      setDescripcion('');
+      setFechaEntrega('');
+      setCliente('');
+   };
+
+   const { msg } = alerta;
+
    return (
-      <form className='bg-white py-10 px-5 md:w-3/5 rounded shadow'>
+      <form
+         className='bg-white py-10 px-5 md:w-3/5 rounded shadow'
+         onSubmit={handleSubmit}
+      >
+         {msg && <Alert alert={alerta} />}
+
          <div className='mb-5'>
             <label
                className='text-gray-700 uppercase font-bold text-sm'
@@ -20,7 +51,7 @@ const FormProject = () => {
                id='nombre'
                placeholder='Project Name'
                value={nombre}
-               onChange={(e) => setName(e.target.value)}
+               onChange={(e) => setNombre(e.target.value)}
             />
          </div>
 
