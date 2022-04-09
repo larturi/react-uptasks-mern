@@ -10,6 +10,20 @@ const ProjectsProvider = ({ children }) => {
 
    const navigate = useNavigate();
 
+   useEffect(() => {
+      const getProjects = async () => {
+         try {
+            const config = getConfig();
+            const { data } = await clientAxios.get('/projects', config);
+            setProjects(data);
+            setProjects(response.data);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getProjects();
+   }, []);
+
    const mostrarAlerta = (alerta) => {
       setAlerta(alerta);
       setTimeout(() => {
@@ -20,19 +34,8 @@ const ProjectsProvider = ({ children }) => {
 
    const submitProject = async (project) => {
       try {
-         const token = localStorage.getItem('token');
-         if (!token) return;
-
-         const config = {
-            headers: {
-               'Content-Type': 'application/json',
-               Authorization: `Bearer ${token}`,
-            },
-         };
-
+         const config = getConfig();
          const { data } = await clientAxios.post('/projects', project, config);
-
-         console.log(data);
          mostrarAlerta({
             msg: 'Projecto creado correctamente',
             error: false,
@@ -43,6 +46,18 @@ const ProjectsProvider = ({ children }) => {
             error: true,
          });
       }
+   };
+
+   const getConfig = () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      return {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+         },
+      };
    };
 
    return (
