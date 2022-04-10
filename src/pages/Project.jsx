@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import useProjects from '../hooks/useProjects';
 
 const Project = () => {
-   return <div>Project</div>;
+   const params = useParams();
+   const { getProject, setProject, project } = useProjects();
+
+   useEffect(() => {
+      setProject({});
+      getProject(params.id);
+   }, []);
+
+   const { nombre } = project;
+
+   return (
+      <div>
+         <h1 className='font-black text-4xl'>{nombre}</h1>
+      </div>
+   );
 };
 
 export default Project;

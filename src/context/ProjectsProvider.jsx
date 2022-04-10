@@ -7,6 +7,7 @@ const ProjectsContext = createContext();
 const ProjectsProvider = ({ children }) => {
    const [projects, setProjects] = useState([]);
    const [alerta, setAlerta] = useState({});
+   const [project, setProject] = useState({});
 
    const navigate = useNavigate();
 
@@ -29,13 +30,15 @@ const ProjectsProvider = ({ children }) => {
       setTimeout(() => {
          setAlerta({});
          navigate('/projects');
-      }, 3000);
+      }, 1000);
    };
 
    const submitProject = async (project) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post('/projects', project, config);
+
+         setProjects([...projects, data]);
          mostrarAlerta({
             msg: 'Projecto creado correctamente',
             error: false,
@@ -45,6 +48,16 @@ const ProjectsProvider = ({ children }) => {
             msg: 'Error al crear el proyecto',
             error: true,
          });
+      }
+   };
+
+   const getProject = async (id) => {
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.get(`/projects/${id}`, config);
+         setProject(data);
+      } catch (error) {
+         console.log(error);
       }
    };
 
@@ -64,9 +77,12 @@ const ProjectsProvider = ({ children }) => {
       <ProjectsContext.Provider
          value={{
             projects,
+            project,
             alerta,
             mostrarAlerta,
             submitProject,
+            getProject,
+            setProject,
          }}
       >
          {children}
