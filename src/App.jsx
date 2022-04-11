@@ -6,12 +6,12 @@ import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import ConfirmAccount from './pages/ConfirmAccount';
 import ProtectedRoutes from './layouts/ProtectedRoutes';
-import Projects from './pages/Projects';
-import NewProject from './pages/NewProject';
-
+import Projects from './pages/Project/Projects';
+import NewProject from './pages/Project/NewProject';
+import Project from './pages/Project/Project';
+import EditProject from './pages/Project/EditProject';
 import { AuthProvider } from './context/AuthProvider';
 import { ProjectsProvider } from './context/ProjectsProvider';
-import Project from './pages/Project';
 
 function App() {
    return (
@@ -43,6 +43,7 @@ function App() {
                         element={<NewProject />}
                      ></Route>
                      <Route path=':id' element={<Project />}></Route>
+                     <Route path='edit/:id' element={<EditProject />}></Route>
                   </Route>
                </Routes>
             </ProjectsProvider>

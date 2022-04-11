@@ -6,9 +6,12 @@ import Sidebar from '../components/Sidebar';
 
 const ProtectedRoutes = () => {
    const { auth, loading } = useAuth();
+
+   if (loading) return 'Cargando...';
+
    return (
       <>
-         {auth._id ? (
+         {auth.id ? (
             <div className='bg-gray-100'>
                <Header />
                <div className='md:flex md:min-h-screen'>

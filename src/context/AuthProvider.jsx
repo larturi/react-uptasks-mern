@@ -29,11 +29,12 @@ const AuthProvider = ({ children }) => {
          // If the token is there, get the user info
          try {
             const { data } = await clientAxios.get('/users/profile', config);
+            data.id = data._id;
+            delete data._id;
             setAuth(data);
-            navigate('/projects');
          } catch (error) {
             setAuth({});
-            console.log(error);
+            console.error(error);
          }
          setLoading(false);
       };

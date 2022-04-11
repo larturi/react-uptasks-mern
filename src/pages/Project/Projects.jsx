@@ -1,6 +1,6 @@
 import React from 'react';
-import PreviewProject from '../components/Project/PreviewProject';
-import useProjects from '../hooks/useProjects';
+import PreviewProject from '../../components/Project/PreviewProject';
+import useProjects from '../../hooks/useProjects';
 
 const Projects = () => {
    const { projects } = useProjects();

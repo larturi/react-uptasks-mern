@@ -8,6 +8,7 @@ const ProjectsProvider = ({ children }) => {
    const [projects, setProjects] = useState([]);
    const [alerta, setAlerta] = useState({});
    const [project, setProject] = useState({});
+   const [loading, setLoading] = useState({});
 
    const navigate = useNavigate();
 
@@ -17,9 +18,8 @@ const ProjectsProvider = ({ children }) => {
             const config = getConfig();
             const { data } = await clientAxios.get('/projects', config);
             setProjects(data);
-            setProjects(response.data);
          } catch (error) {
-            console.log(error);
+            console.error(error);
          }
       };
       getProjects();
@@ -29,11 +29,49 @@ const ProjectsProvider = ({ children }) => {
       setAlerta(alerta);
       setTimeout(() => {
          setAlerta({});
-         navigate('/projects');
+         if (alerta.redirectToProjects) {
+            navigate('/projects');
+         }
       }, 1000);
    };
 
    const submitProject = async (project) => {
+      if (project.id) {
+         await editProject(project);
+      } else {
+         await newProject(project);
+      }
+   };
+
+   const editProject = async (project) => {
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.put(
+            `/projects/${project.id}`,
+            project,
+            config
+         );
+
+         const proyectosActualizados = projects.map((proyectoState) =>
+            proyectoState._id === data._id ? data : proyectoState
+         );
+         setProjects(proyectosActualizados);
+
+         mostrarAlerta({
+            msg: 'Projecto actualizado correctamente',
+            error: false,
+            redirectToProjects: true,
+         });
+      } catch (error) {
+         console.log(error);
+         mostrarAlerta({
+            msg: 'Error al actualizar el proyecto',
+            error: true,
+         });
+      }
+   };
+
+   const newProject = async (project) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post('/projects', project, config);
@@ -42,6 +80,7 @@ const ProjectsProvider = ({ children }) => {
          mostrarAlerta({
             msg: 'Projecto creado correctamente',
             error: false,
+            redirectToProjects: true,
          });
       } catch (error) {
          mostrarAlerta({
@@ -53,11 +92,14 @@ const ProjectsProvider = ({ children }) => {
 
    const getProject = async (id) => {
       try {
+         setLoading(true);
          const config = getConfig();
          const { data } = await clientAxios.get(`/projects/${id}`, config);
          setProject(data);
       } catch (error) {
-         console.log(error);
+         console.error(error);
+      } finally {
+         setLoading(false);
       }
    };
 
@@ -79,6 +121,7 @@ const ProjectsProvider = ({ children }) => {
             projects,
             project,
             alerta,
+            loading,
             mostrarAlerta,
             submitProject,
             getProject,

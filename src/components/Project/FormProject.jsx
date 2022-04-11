@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import useProjects from '../../hooks/useProjects';
 import Alert from '../Alert';
 
 const FormProject = () => {
+   const [id, setId] = useState(null);
    const [nombre, setNombre] = useState('');
    const [descripcion, setDescripcion] = useState('');
    const [fechaEntrega, setFechaEntrega] = useState('');
    const [cliente, setCliente] = useState('');
 
-   const { alerta, mostrarAlerta, submitProject } = useProjects();
+   const params = useParams();
+
+   useEffect(() => {
+      if (params.id && project.nombre) {
+         setId(project._id);
+         setNombre(project.nombre);
+         setDescripcion(project.descripcion);
+         setFechaEntrega(project.fechaEntrega?.split('T')[0]);
+         setCliente(project.cliente);
+      }
+   }, [params]);
+
+   const { alerta, mostrarAlerta, submitProject, project } = useProjects();
 
    const handleSubmit = async (e) => {
       e.preventDefault();
@@ -21,12 +35,15 @@ const FormProject = () => {
          return;
       }
 
-      await submitProject({ nombre, descripcion, fechaEntrega, cliente });
+      await submitProject({ id, nombre, descripcion, fechaEntrega, cliente });
 
-      setNombre('');
-      setDescripcion('');
-      setFechaEntrega('');
-      setCliente('');
+      if (!id) {
+         setId(null);
+         setNombre('');
+         setDescripcion('');
+         setFechaEntrega('');
+         setCliente('');
+      }
    };
 
    const { msg } = alerta;
@@ -106,7 +123,7 @@ const FormProject = () => {
 
          <input
             type='submit'
-            value='Create Project'
+            value={id ? 'Editar Proyecto' : 'Crear Proyecto'}
             className='bg-sky-600 w-full p-3 uppercase text-white font-bold rounded cursor-pointer hover:bg-sky-700 transition-colors'
          />
       </form>

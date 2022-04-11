@@ -1,5 +1,5 @@
 import React from 'react';
-import FormProject from '../components/Project/FormProject';
+import FormProject from '../../components/Project/FormProject';
 
 const NewProject = () => {
    return (
