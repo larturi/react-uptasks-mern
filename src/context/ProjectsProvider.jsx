@@ -9,6 +9,7 @@ const ProjectsProvider = ({ children }) => {
    const [alerta, setAlerta] = useState({});
    const [project, setProject] = useState({});
    const [loading, setLoading] = useState({});
+   const [modalFormTask, setModalFormTask] = useState(false);
 
    const navigate = useNavigate();
 
@@ -124,6 +125,10 @@ const ProjectsProvider = ({ children }) => {
       }
    };
 
+   const handleModalFormTask = () => {
+      setModalFormTask(!modalFormTask);
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -148,6 +153,8 @@ const ProjectsProvider = ({ children }) => {
             getProject,
             setProject,
             deleteProject,
+            handleModalFormTask,
+            modalFormTask,
          }}
       >
          {children}
