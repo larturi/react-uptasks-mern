@@ -76,7 +76,7 @@ const ProjectsProvider = ({ children }) => {
          const config = getConfig();
          const { data } = await clientAxios.post('/projects', project, config);
 
-         setProjects([...projects, data]);
+         setProjects([data, ...projects]);
          mostrarAlerta({
             msg: 'Projecto creado correctamente',
             error: false,
@@ -103,6 +103,27 @@ const ProjectsProvider = ({ children }) => {
       }
    };
 
+   const deleteProject = async (id) => {
+      try {
+         const config = getConfig();
+         await clientAxios.delete(`/projects/${id}`, config);
+         const proyectosActualizados = projects.filter(
+            (proyectoState) => proyectoState._id !== id
+         );
+         setProjects(proyectosActualizados);
+         mostrarAlerta({
+            msg: 'Proyecto eliminado correctamente',
+            error: false,
+            redirectToProjects: true,
+         });
+      } catch (error) {
+         mostrarAlerta({
+            msg: 'Error al eliminar el proyecto',
+            error: true,
+         });
+      }
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -126,6 +147,7 @@ const ProjectsProvider = ({ children }) => {
             submitProject,
             getProject,
             setProject,
+            deleteProject,
          }}
       >
          {children}
