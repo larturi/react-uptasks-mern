@@ -4,6 +4,11 @@ import useProjects from '../../hooks/useProjects';
 
 const ModalFormularioTarea = () => {
    const { modalFormTask, handleModalFormTask } = useProjects();
+   const [nombre, setNombre] = useState('');
+   const [descripcion, setDescripcion] = useState('');
+   const [prioridad, setPrioridad] = useState('');
+
+   const PRIORIDAD_ENUM = ['Alta', 'Media', 'Baja'];
 
    return (
       <Transition.Root show={modalFormTask} as={Fragment}>
@@ -71,9 +76,76 @@ const ModalFormularioTarea = () => {
                               as='h1'
                               className='text-lg leading-6 font-bold text-gray-900'
                            >
-                              <p className='text-lg'>Titulo</p>
+                              <p className='text-lg'>Crear Tarea</p>
                            </Dialog.Title>
-                           <p>Contenido</p>
+                           <form className='my-10'>
+                              <div className='mb-5'>
+                                 <label
+                                    htmlFor='nombre'
+                                    className='uppercase font-bold text-sm text-gray-700'
+                                 >
+                                    Nombre
+                                 </label>
+                                 <input
+                                    type='text'
+                                    id='nombre'
+                                    placeholder='Nombre de la tarea'
+                                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                    value={nombre}
+                                    onChange={(e) => setNombre(e.target.value)}
+                                 />
+                              </div>
+
+                              <div className='mb-5'>
+                                 <label
+                                    htmlFor='descripcion'
+                                    className='uppercase font-bold text-sm text-gray-700'
+                                 >
+                                    Descripción
+                                 </label>
+                                 <textarea
+                                    id='descripcion'
+                                    placeholder='Descripción de la tarea'
+                                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                    value={descripcion}
+                                    onChange={(e) =>
+                                       setDescripcion(e.target.value)
+                                    }
+                                 />
+                              </div>
+
+                              <div className='mb-5'>
+                                 <label
+                                    htmlFor='prioridad'
+                                    className='uppercase font-bold text-sm text-gray-700'
+                                 >
+                                    Prioridad
+                                 </label>
+                                 <select
+                                    id='prioridad'
+                                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                    value={prioridad}
+                                    onChange={(e) =>
+                                       setPrioridad(e.target.value)
+                                    }
+                                 >
+                                    <option value=''>
+                                       -- Seleccione una prioridad --
+                                    </option>
+                                    {PRIORIDAD_ENUM.map((prioridad) => (
+                                       <option key={prioridad}>
+                                          {prioridad}
+                                       </option>
+                                    ))}
+                                 </select>
+
+                                 <input
+                                    type='submit'
+                                    className='bg-sky-600 hover:bg-sky-700 w-full uppercase text-white font-bold py-2 px-4 rounded-md mt-10 mb-0 cursor-pointer transition-colors'
+                                    value='Crear Tarea'
+                                 />
+                              </div>
+                           </form>
                         </div>
                      </div>
                   </div>
