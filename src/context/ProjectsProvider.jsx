@@ -33,7 +33,7 @@ const ProjectsProvider = ({ children }) => {
          if (alerta.redirectToProjects) {
             navigate('/projects');
          }
-      }, 1000);
+      }, 3000);
    };
 
    const submitProject = async (project) => {
@@ -129,6 +129,20 @@ const ProjectsProvider = ({ children }) => {
       setModalFormTask(!modalFormTask);
    };
 
+   const submitTask = async (task) => {
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.post(`/tasks`, task, config);
+         console.log(data);
+         mostrarAlerta({
+            msg: 'Tarea creada correctamente',
+            error: false,
+         });
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -155,6 +169,7 @@ const ProjectsProvider = ({ children }) => {
             deleteProject,
             handleModalFormTask,
             modalFormTask,
+            submitTask,
          }}
       >
          {children}
