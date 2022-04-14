@@ -64,7 +64,6 @@ const ProjectsProvider = ({ children }) => {
             redirectToProjects: true,
          });
       } catch (error) {
-         console.log(error);
          mostrarAlerta({
             msg: 'Error al actualizar el proyecto',
             error: true,
@@ -133,11 +132,11 @@ const ProjectsProvider = ({ children }) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post(`/tasks`, task, config);
-         console.log(data);
-         mostrarAlerta({
-            msg: 'Tarea creada correctamente',
-            error: false,
-         });
+         const proyectosActualizado = { ...project };
+         proyectosActualizado.tareas = [data, ...proyectosActualizado.tareas];
+         setProject(proyectosActualizado);
+         mostrarAlerta({});
+         setModalFormTask(false);
       } catch (error) {
          console.error(error);
       }
