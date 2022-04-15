@@ -4,10 +4,11 @@ import useProjects from '../../hooks/useProjects';
 import ModalFormTask from '../../components/Task/ModalFormTask';
 import ModalDeleteTask from '../../components/Task/ModalDeleteTask';
 import Task from '../../components/Task/Task';
+import Alert from '../../components/Alert';
 
 const Project = () => {
    const params = useParams();
-   const { getProject, setProject, project, handleModalFormTask } =
+   const { getProject, setProject, project, handleModalFormTask, alerta } =
       useProjects();
 
    useEffect(() => {
@@ -16,6 +17,8 @@ const Project = () => {
    }, []);
 
    const { nombre } = project;
+
+   const { msg } = alerta;
 
    return (
       <>
@@ -67,9 +70,11 @@ const Project = () => {
             Nueva Tarea
          </button>
 
-         <p className='font-bold text-xl mt-10'>Tareas del Proyecto</p>
+         <p className='font-bold text-xl mt-10 mb-3'>Tareas del Proyecto</p>
 
-         <div className='mt-10'>
+         {msg && <Alert alert={alerta} />}
+
+         <div className='mt-5'>
             {project.tareas && project.tareas.length ? (
                project.tareas.map((tarea) => (
                   <Task key={tarea._id} tarea={tarea} />

@@ -183,6 +183,29 @@ const ProjectsProvider = ({ children }) => {
       setModalDeleteTask(!modalDeleteTask);
    };
 
+   const deleteTask = async () => {
+      try {
+         const config = getConfig();
+         await clientAxios.delete(`/tasks/${tarea._id}`, config);
+         const proyectosActualizado = { ...project };
+         proyectosActualizado.tareas = proyectosActualizado.tareas.filter(
+            (tareaState) => tareaState._id !== tarea._id
+         );
+         setProject(proyectosActualizado);
+         setAlerta({
+            msg: 'Tarea eliminada correctamente',
+            error: false,
+         });
+         setModalDeleteTask(false);
+         setTarea({});
+         setTimeout(() => {
+            setAlerta({});
+         }, 2500);
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -214,6 +237,7 @@ const ProjectsProvider = ({ children }) => {
             tarea,
             handleModalEliminarTarea,
             modalDeleteTask,
+            deleteTask,
          }}
       >
          {children}
