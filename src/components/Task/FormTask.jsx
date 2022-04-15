@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useProjects from '../../hooks/useProjects';
 import Alert from '../Alert';
 
 const FormTask = ({ projectId }) => {
+   const [id, setId] = useState('');
    const [nombre, setNombre] = useState('');
    const [descripcion, setDescripcion] = useState('');
    const [fechaEntrega, setFechaEntrega] = useState('');
@@ -10,7 +11,23 @@ const FormTask = ({ projectId }) => {
 
    const PRIORIDAD_ENUM = ['Alta', 'Media', 'Baja'];
 
-   const { mostrarAlerta, alerta, submitTask } = useProjects();
+   const { mostrarAlerta, alerta, submitTask, tarea } = useProjects();
+
+   useEffect(() => {
+      if (tarea._id) {
+         setId(tarea._id);
+         setNombre(tarea.nombre);
+         setDescripcion(tarea.descripcion);
+         setFechaEntrega(tarea.fechaEntrega?.split('T')[0]);
+         setPrioridad(tarea.prioridad);
+         return;
+      }
+      setId('');
+      setNombre('');
+      setDescripcion('');
+      setFechaEntrega('');
+      setPrioridad('');
+   }, [tarea]);
 
    const handleSubmit = (e) => {
       e.preventDefault();
@@ -24,6 +41,7 @@ const FormTask = ({ projectId }) => {
       }
 
       submitTask({
+         id,
          nombre,
          descripcion,
          fechaEntrega,
@@ -108,7 +126,7 @@ const FormTask = ({ projectId }) => {
                <input
                   type='submit'
                   className='bg-sky-600 hover:bg-sky-700 w-full uppercase text-white font-bold py-2 px-4 rounded-md mt-10 mb-0 cursor-pointer transition-colors'
-                  value='Crear Tarea'
+                  value={tarea._id ? 'Guardar Cambios' : 'Crear Tarea'}
                />
             </div>
          </form>

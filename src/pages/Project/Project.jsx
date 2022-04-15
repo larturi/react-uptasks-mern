@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useProjects from '../../hooks/useProjects';
 import ModalFormTask from '../../components/Task/ModalFormTask';
+import ModalDeleteTask from '../../components/Task/ModalDeleteTask';
 import Task from '../../components/Task/Task';
 
 const Project = () => {
@@ -66,23 +67,22 @@ const Project = () => {
             Nueva Tarea
          </button>
 
-         <p className='font-bold text-xl mt-10'>
-            Tareas del Proyecto
-         </p>
+         <p className='font-bold text-xl mt-10'>Tareas del Proyecto</p>
 
          <div className='mt-10'>
-            {
-               project.tareas && project.tareas.length ? (
-                  project.tareas.map(tarea => (
-                     <Task key={tarea._id} tarea={tarea} />
-                  ))
-               ) : (
-                  <p className='text-center m-5 p-10'>No hay tareas pendientes en el proyecto</p>
-               )
-            }
+            {project.tareas && project.tareas.length ? (
+               project.tareas.map((tarea) => (
+                  <Task key={tarea._id} tarea={tarea} />
+               ))
+            ) : (
+               <p className='text-center m-5 p-10'>
+                  No hay tareas pendientes en el proyecto
+               </p>
+            )}
          </div>
 
          <ModalFormTask />
+         <ModalDeleteTask />
       </>
    );
 };

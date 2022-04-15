@@ -10,6 +10,8 @@ const ProjectsProvider = ({ children }) => {
    const [project, setProject] = useState({});
    const [loading, setLoading] = useState({});
    const [modalFormTask, setModalFormTask] = useState(false);
+   const [modalDeleteTask, setModalDeleteTask] = useState(false);
+   const [tarea, setTarea] = useState({});
 
    const navigate = useNavigate();
 
@@ -126,9 +128,23 @@ const ProjectsProvider = ({ children }) => {
 
    const handleModalFormTask = () => {
       setModalFormTask(!modalFormTask);
+      setTarea({});
+   };
+
+   const handleModalEditarTarea = (task) => {
+      setTarea(task);
+      setModalFormTask(true);
    };
 
    const submitTask = async (task) => {
+      if (task.id) {
+         await editarTarea(task);
+      } else {
+         await crearTarea(task);
+      }
+   };
+
+   const crearTarea = async (task) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post(`/tasks`, task, config);
@@ -140,6 +156,31 @@ const ProjectsProvider = ({ children }) => {
       } catch (error) {
          console.error(error);
       }
+   };
+
+   const editarTarea = async (task) => {
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.put(
+            `/tasks/${task.id}`,
+            task,
+            config
+         );
+         const proyectosActualizado = { ...project };
+         proyectosActualizado.tareas = proyectosActualizado.tareas.map(
+            (tareaState) => (tareaState._id === data._id ? data : tareaState)
+         );
+         setProject(proyectosActualizado);
+         mostrarAlerta({});
+         setModalFormTask(false);
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
+   const handleModalEliminarTarea = (task) => {
+      setTarea(task);
+      setModalDeleteTask(!modalDeleteTask);
    };
 
    const getConfig = () => {
@@ -169,6 +210,10 @@ const ProjectsProvider = ({ children }) => {
             handleModalFormTask,
             modalFormTask,
             submitTask,
+            handleModalEditarTarea,
+            tarea,
+            handleModalEliminarTarea,
+            modalDeleteTask,
          }}
       >
          {children}
