@@ -12,6 +12,7 @@ const ProjectsProvider = ({ children }) => {
    const [modalFormTask, setModalFormTask] = useState(false);
    const [modalDeleteTask, setModalDeleteTask] = useState(false);
    const [tarea, setTarea] = useState({});
+   const [collaborator, setCollaborator] = useState({});
 
    const navigate = useNavigate();
 
@@ -99,6 +100,10 @@ const ProjectsProvider = ({ children }) => {
          const { data } = await clientAxios.get(`/projects/${id}`, config);
          setProject(data);
       } catch (error) {
+         setAlerta({
+            msg: error.response.data.msg,
+            error: true,
+         });
          console.error(error);
       } finally {
          setLoading(false);
@@ -206,6 +211,64 @@ const ProjectsProvider = ({ children }) => {
       }
    };
 
+   const submitCollaborator = async (email) => {
+      setLoading(true);
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.post(
+            `/projects/collaborators`,
+            { email },
+            config
+         );
+         setCollaborator(data);
+         setAlerta({});
+      } catch (error) {
+         setAlerta({
+            msg: 'Usuario no encontrado',
+            error: true,
+         });
+         console.error(error.response);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const addCollaborator = async (email) => {
+      try {
+         const config = getConfig();
+         const { data } = await clientAxios.post(
+            `/projects/collaborators/${project._id}`,
+            { email },
+            config
+         );
+         setAlerta({
+            msg: 'Colaborador agregado correctamente',
+            error: false,
+         });
+         setCollaborator({});
+         setAlerta({});
+      } catch (error) {
+         let msgError = 'Error al agregar el colaborador';
+         switch (error.response.data.msg) {
+            case 'user_is_creator':
+               msgError = 'El usuario es el creador del proyecto';
+               break;
+
+            case 'user_already_in_project':
+               msgError = 'El usuario ya es colaborador de este proyecto';
+               break;
+
+            default:
+               break;
+         }
+         setAlerta({
+            msg: msgError,
+            error: true,
+         });
+         console.error(error.response);
+      }
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -238,6 +301,10 @@ const ProjectsProvider = ({ children }) => {
             handleModalEliminarTarea,
             modalDeleteTask,
             deleteTask,
+            submitCollaborator,
+            collaborator,
+            setCollaborator,
+            addCollaborator,
          }}
       >
          {children}
