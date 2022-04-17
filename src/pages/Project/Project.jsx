@@ -3,13 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import useProjects from '../../hooks/useProjects';
 import ModalFormTask from '../../components/Task/ModalFormTask';
 import ModalDeleteTask from '../../components/Task/ModalDeleteTask';
+import ModalDeleteCollaborator from '../../components/Collaborator/ModalDeleteCollaborator';
 import Task from '../../components/Task/Task';
 import Alert from '../../components/Alert';
+import Collaborator from '../../components/Collaborator/Collaborator';
 
 const Project = () => {
    const params = useParams();
-   const { getProject, setProject, project, handleModalFormTask, alerta } =
-      useProjects();
+   const { getProject, setProject, project, handleModalFormTask, alerta } = useProjects();
 
    useEffect(() => {
       setProject({});
@@ -39,10 +40,7 @@ const Project = () => {
                      d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z'
                   />
                </svg>
-               <Link
-                  to={`/projects/edit/${params.id}`}
-                  className='uppercase font-bold'
-               >
+               <Link to={`/projects/edit/${params.id}`} className='uppercase font-bold'>
                   Editar
                </Link>
             </div>
@@ -76,13 +74,9 @@ const Project = () => {
 
          <div className='mt-5'>
             {project.tareas && project.tareas.length ? (
-               project.tareas.map((tarea) => (
-                  <Task key={tarea._id} tarea={tarea} />
-               ))
+               project.tareas.map((tarea) => <Task key={tarea._id} tarea={tarea} />)
             ) : (
-               <p className='text-center m-5 p-10'>
-                  No hay tareas pendientes en el proyecto
-               </p>
+               <p className='text-center p-10 bg-white'>No hay tareas pendientes en el proyecto</p>
             )}
          </div>
 
@@ -96,8 +90,19 @@ const Project = () => {
             </Link>
          </div>
 
+         <div className='mt-5 bg-white'>
+            {project.colaboradores && project.colaboradores.length ? (
+               project.colaboradores.map((colaborador) => (
+                  <Collaborator key={colaborador._id} colaborador={colaborador} />
+               ))
+            ) : (
+               <p className='text-center p-10 bg-white'>No hay colaboradores en el proyecto</p>
+            )}
+         </div>
+
          <ModalFormTask />
          <ModalDeleteTask />
+         <ModalDeleteCollaborator />
       </>
    );
 };

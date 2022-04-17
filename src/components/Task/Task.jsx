@@ -20,24 +20,24 @@ const Task = ({ tarea }) => {
 
          <div className='flex gap-2'>
             <button
-               className='bg-indigo-500 uppercase hover:bg-indigo-600 text-white text-sm font-bold py-2 px-4 rounded'
+               className='bg-indigo-500 uppercase hover:bg-indigo-600 text-white text-sm font-bold py-2 px-4'
                onClick={() => handleModalEditarTarea(tarea)}
             >
                Editar
             </button>
 
             {estado ? (
-               <button className='bg-gray-500 uppercase hover:bg-indigo-700 text-sm font-bold text-white py-2 px-4 rounded'>
+               <button className='bg-gray-500 uppercase hover:bg-indigo-700 text-sm font-bold text-white py-2 px-4'>
                   Incompleta
                </button>
             ) : (
-               <button className='bg-sky-500 uppercase hover:bg-sky-600 text-sm font-bold text-white py-2 px-4 rounded'>
+               <button className='bg-sky-500 uppercase hover:bg-sky-600 text-sm font-bold text-white py-2 px-4'>
                   Completa
                </button>
             )}
 
             <button
-               className='bg-red-500 uppercase hover:bg-red-600 text-sm font-bold text-white py-2 px-4 rounded'
+               className='bg-red-500 uppercase hover:bg-red-600 text-sm font-bold text-white py-2 px-4'
                onClick={() => handleModalEliminarTarea(tarea)}
             >
                Eliminar

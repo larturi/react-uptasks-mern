@@ -13,6 +13,7 @@ const ProjectsProvider = ({ children }) => {
    const [modalDeleteTask, setModalDeleteTask] = useState(false);
    const [tarea, setTarea] = useState({});
    const [collaborator, setCollaborator] = useState({});
+   const [modalDeleteCollaborator, setModalDeleteCollaborator] = useState(false);
 
    const navigate = useNavigate();
 
@@ -50,11 +51,7 @@ const ProjectsProvider = ({ children }) => {
    const editProject = async (project) => {
       try {
          const config = getConfig();
-         const { data } = await clientAxios.put(
-            `/projects/${project.id}`,
-            project,
-            config
-         );
+         const { data } = await clientAxios.put(`/projects/${project.id}`, project, config);
 
          const proyectosActualizados = projects.map((proyectoState) =>
             proyectoState._id === data._id ? data : proyectoState
@@ -114,9 +111,7 @@ const ProjectsProvider = ({ children }) => {
       try {
          const config = getConfig();
          await clientAxios.delete(`/projects/${id}`, config);
-         const proyectosActualizados = projects.filter(
-            (proyectoState) => proyectoState._id !== id
-         );
+         const proyectosActualizados = projects.filter((proyectoState) => proyectoState._id !== id);
          setProjects(proyectosActualizados);
          mostrarAlerta({
             msg: 'Proyecto eliminado correctamente',
@@ -166,14 +161,10 @@ const ProjectsProvider = ({ children }) => {
    const editarTarea = async (task) => {
       try {
          const config = getConfig();
-         const { data } = await clientAxios.put(
-            `/tasks/${task.id}`,
-            task,
-            config
-         );
+         const { data } = await clientAxios.put(`/tasks/${task.id}`, task, config);
          const proyectosActualizado = { ...project };
-         proyectosActualizado.tareas = proyectosActualizado.tareas.map(
-            (tareaState) => (tareaState._id === data._id ? data : tareaState)
+         proyectosActualizado.tareas = proyectosActualizado.tareas.map((tareaState) =>
+            tareaState._id === data._id ? data : tareaState
          );
          setProject(proyectosActualizado);
          mostrarAlerta({});
@@ -215,11 +206,7 @@ const ProjectsProvider = ({ children }) => {
       setLoading(true);
       try {
          const config = getConfig();
-         const { data } = await clientAxios.post(
-            `/projects/collaborators`,
-            { email },
-            config
-         );
+         const { data } = await clientAxios.post(`/projects/collaborators`, { email }, config);
          setCollaborator(data);
          setAlerta({});
       } catch (error) {
@@ -269,6 +256,15 @@ const ProjectsProvider = ({ children }) => {
       }
    };
 
+   const handleModalDeleteCollaborator = (colaborador) => {
+      setModalDeleteCollaborator(!modalDeleteCollaborator);
+      setCollaborator(colaborador);
+   };
+
+   const deleteCollaborator = async () => {
+      console.log(collaborator);
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -305,6 +301,9 @@ const ProjectsProvider = ({ children }) => {
             collaborator,
             setCollaborator,
             addCollaborator,
+            handleModalDeleteCollaborator,
+            modalDeleteCollaborator,
+            deleteCollaborator,
          }}
       >
          {children}
