@@ -234,6 +234,7 @@ const ProjectsProvider = ({ children }) => {
          });
          setCollaborator({});
          setAlerta({});
+         navigate(`/projects/${project._id}`);
       } catch (error) {
          let msgError = 'Error al agregar el colaborador';
          switch (error.response.data.msg) {
@@ -262,7 +263,31 @@ const ProjectsProvider = ({ children }) => {
    };
 
    const deleteCollaborator = async () => {
-      console.log(collaborator);
+      try {
+         const config = getConfig();
+         await clientAxios.post(
+            `/projects/collaborator-delete/${project._id}`,
+            { id: collaborator._id },
+            config
+         );
+         setAlerta({
+            msg: 'Colaborador eliminado correctamente',
+            error: false,
+         });
+         setCollaborator({});
+         handleModalDeleteCollaborator();
+
+         const proyectosActualizado = { ...project };
+         proyectosActualizado.colaboradores = proyectosActualizado.colaboradores.filter(
+            (colaboradorState) => colaboradorState._id !== collaborator._id
+         );
+         setProject(proyectosActualizado);
+      } catch (error) {
+         setAlerta({
+            msg: 'Error al eliminar el colaborador',
+            error: true,
+         });
+      }
    };
 
    const getConfig = () => {
