@@ -1,11 +1,14 @@
 import React from 'react';
 import { formatearFecha } from '../../helpers/fechas';
 import useProjects from '../../hooks/useProjects';
+import useAdmin from '../../hooks/useAdmin';
 
 const Task = ({ tarea }) => {
    const { nombre, descripcion, prioridad, fechaEntrega, estado, _id } = tarea;
 
-   const { handleModalEditarTarea, handleModalEliminarTarea } = useProjects();
+   const { handleModalEditarTarea, handleModalEliminarTarea, completarTarea } = useProjects();
+
+   const isOwnerToProject = useAdmin();
 
    return (
       <div className='border-b p-4 flex justify-between items-center bg-white shadow mt-4 rounded'>
@@ -19,29 +22,32 @@ const Task = ({ tarea }) => {
          </div>
 
          <div className='flex gap-2'>
-            <button
-               className='bg-indigo-500 uppercase hover:bg-indigo-600 text-white text-sm font-bold py-2 px-4'
-               onClick={() => handleModalEditarTarea(tarea)}
-            >
-               Editar
-            </button>
-
-            {estado ? (
-               <button className='bg-gray-500 uppercase hover:bg-indigo-700 text-sm font-bold text-white py-2 px-4'>
-                  Incompleta
-               </button>
-            ) : (
-               <button className='bg-sky-500 uppercase hover:bg-sky-600 text-sm font-bold text-white py-2 px-4'>
-                  Completa
+            {isOwnerToProject && (
+               <button
+                  className='bg-indigo-500 uppercase hover:bg-indigo-600 text-white text-sm font-bold py-2 px-4'
+                  onClick={() => handleModalEditarTarea(tarea)}
+               >
+                  Editar
                </button>
             )}
 
             <button
-               className='bg-red-500 uppercase hover:bg-red-600 text-sm font-bold text-white py-2 px-4'
-               onClick={() => handleModalEliminarTarea(tarea)}
+               className={`${
+                  estado ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-500 hover:bg-gray-700'
+               }  uppercase  text-sm font-bold text-white py-2 px-4`}
+               onClick={() => completarTarea(_id)}
             >
-               Eliminar
+               {estado ? 'Completa' : 'Pendiente'}
             </button>
+
+            {isOwnerToProject && (
+               <button
+                  className='bg-red-500 uppercase hover:bg-red-600 text-sm font-bold text-white py-2 px-4'
+                  onClick={() => handleModalEliminarTarea(tarea)}
+               >
+                  Eliminar
+               </button>
+            )}
          </div>
       </div>
    );
