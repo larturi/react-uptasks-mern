@@ -24,14 +24,7 @@ const Project = () => {
 
    const { msg } = alerta;
 
-   return msg && alerta.error ? (
-      <Alert
-         alert={{
-            msg: 'No tienes permisos para ver este proyecto',
-            error: true,
-         }}
-      />
-   ) : (
+   return (
       <>
          <div className='flex justify-between'>
             <h1 className='font-black text-4xl'>{nombre}</h1>
@@ -85,8 +78,6 @@ const Project = () => {
          )}
 
          <p className='font-bold text-xl mt-10 mb-3'>Tareas del Proyecto</p>
-
-         {msg && <Alert alert={alerta} />}
 
          <div className='mt-5'>
             {project.tareas && project.tareas.length ? (

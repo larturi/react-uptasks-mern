@@ -97,10 +97,14 @@ const ProjectsProvider = ({ children }) => {
          const { data } = await clientAxios.get(`/projects/${id}`, config);
          setProject(data);
       } catch (error) {
+         navigate('/projects');
          setAlerta({
             msg: error.response.data.msg,
             error: true,
          });
+         setTimeout(() => {
+            setAlerta({});
+         }, 2000);
          console.error(error);
       } finally {
          setLoading(false);
