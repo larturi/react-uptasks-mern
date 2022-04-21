@@ -4,7 +4,7 @@ import useProjects from '../../hooks/useProjects';
 import useAdmin from '../../hooks/useAdmin';
 
 const Task = ({ tarea }) => {
-   const { nombre, descripcion, prioridad, fechaEntrega, estado, _id } = tarea;
+   const { nombre, descripcion, prioridad, fechaEntrega, estado, _id, completedBy } = tarea;
 
    const { handleModalEditarTarea, handleModalEliminarTarea, completarTarea } = useProjects();
 
@@ -19,6 +19,11 @@ const Task = ({ tarea }) => {
                Vencimiento: {formatearFecha(fechaEntrega)}
             </p>
             <p className='mb-1 text-sm text-gray-600'>Prioridad: {prioridad}</p>
+            {estado && completedBy && (
+               <p className='text-xs bg-green-700 uppercase rounded-lg text-white px-2 py-1'>
+                  Completada por: {completedBy.email}
+               </p>
+            )}
          </div>
 
          <div className='flex gap-2'>
