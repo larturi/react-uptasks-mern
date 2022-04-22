@@ -14,6 +14,7 @@ const ProjectsProvider = ({ children }) => {
    const [tarea, setTarea] = useState({});
    const [collaborator, setCollaborator] = useState({});
    const [modalDeleteCollaborator, setModalDeleteCollaborator] = useState(false);
+   const [buscador, setBuscador] = useState(false);
 
    const navigate = useNavigate();
 
@@ -309,6 +310,10 @@ const ProjectsProvider = ({ children }) => {
       }
    };
 
+   const handleBuscador = () => {
+      setBuscador(!buscador);
+   };
+
    const getConfig = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -349,6 +354,8 @@ const ProjectsProvider = ({ children }) => {
             modalDeleteCollaborator,
             deleteCollaborator,
             completarTarea,
+            handleBuscador,
+            buscador,
          }}
       >
          {children}
