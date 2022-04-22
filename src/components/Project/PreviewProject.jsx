@@ -13,19 +13,19 @@ const PreviewProject = ({ project }) => {
    }, []);
 
    return (
-      <div className='p-5 border-b flex justify-between' key={project.id}>
+      <div className='p-5 border-b flex flex-col md:flex-row justify-between' key={project.id}>
          <div className='flex items-center gap-2'>
-            <p className='flex-1'>
-               {nombre}
-               <span className='text-sm text-gray-500 uppercase'> {cliente}</span>
-            </p>
+            <div className='flex-1'>
+               <p>{nombre}</p>
+               <p className='text-ultra-sm text-gray-500 uppercase w-full'> {cliente}</p>
+            </div>
 
             {auth.id !== creador ? (
-               <p className='px-2 py-1 text-xs rounded-lg text-white bg-green-600 uppercase'>
+               <p className='px-2 py-1 text-ultra-sm rounded text-white bg-green-600 uppercase'>
                   Colaborador
                </p>
             ) : (
-               <p className='px-2 py-1 text-xs rounded-lg text-white bg-blue-600 uppercase'>
+               <p className='px-2 py-1 text-ultra-sm rounded text-white bg-blue-600 uppercase'>
                   Owner
                </p>
             )}
@@ -33,7 +33,7 @@ const PreviewProject = ({ project }) => {
 
          <Link
             to={`${_id}`}
-            className='text-gray-600 hover:text-gray-800 uppercase text-sm font-bold'
+            className='px-4 py-3 text-xs rounded text-white bg-purple-600 hover:bg-purple-700 text-center mt-4 md:mt-0 uppercase'
          >
             Ver Proyecto
          </Link>
