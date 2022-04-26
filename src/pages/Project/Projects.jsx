@@ -1,21 +1,9 @@
-import React, { useEffect } from 'react';
-import io from 'socket.io-client';
+import React from 'react';
 import PreviewProject from '../../components/Project/PreviewProject';
 import useProjects from '../../hooks/useProjects';
 
-let socket;
-
 const Projects = () => {
    const { projects } = useProjects();
-
-   useEffect(() => {
-      socket = io(import.meta.env.VITE_BACKEND_URL);
-      // socket.emit('join', { room: 'Projects' });
-      // return () => {
-      //    socket.emit('disconnect');
-      //    socket.off();
-      // };
-   }, []);
 
    return (
       <>

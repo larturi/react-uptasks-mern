@@ -1,6 +1,9 @@
 import { useEffect, useState, createContext } from 'react';
 import clientAxios from '../config/clientAxios';
 import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
+
+let socket;
 
 const ProjectsContext = createContext();
 
@@ -29,6 +32,10 @@ const ProjectsProvider = ({ children }) => {
          }
       };
       getProjects();
+   }, []);
+
+   useEffect(() => {
+      socket = io(import.meta.env.VITE_BACKEND_URL);
    }, []);
 
    const mostrarAlerta = (alerta) => {
@@ -153,11 +160,11 @@ const ProjectsProvider = ({ children }) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post(`/tasks`, task, config);
-         const proyectosActualizado = { ...project };
-         proyectosActualizado.tareas = [data, ...proyectosActualizado.tareas];
-         setProject(proyectosActualizado);
          mostrarAlerta({});
          setModalFormTask(false);
+
+         // Socket IO
+         socket.emit('newTask', data);
       } catch (error) {
          console.error(error);
       }
@@ -326,6 +333,13 @@ const ProjectsProvider = ({ children }) => {
       };
    };
 
+   // Socket IO
+   const submitTareasProyecto = (task) => {
+      const proyectosActualizado = { ...project };
+      proyectosActualizado.tareas = [task, ...proyectosActualizado.tareas];
+      setProject(proyectosActualizado);
+   };
+
    return (
       <ProjectsContext.Provider
          value={{
@@ -356,6 +370,7 @@ const ProjectsProvider = ({ children }) => {
             completarTarea,
             handleBuscador,
             buscador,
+            submitTareasProyecto,
          }}
       >
          {children}

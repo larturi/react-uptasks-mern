@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import io from 'socket.io-client';
 import useProjects from '../../hooks/useProjects';
 import useAdmin from '../../hooks/useAdmin';
 import ModalFormTask from '../../components/Task/ModalFormTask';
@@ -9,14 +10,36 @@ import Task from '../../components/Task/Task';
 import Alert from '../../components/Alert';
 import Collaborator from '../../components/Collaborator/Collaborator';
 
+let socket;
+
 const Project = () => {
    const params = useParams();
-   const { getProject, setProject, project, handleModalFormTask, alerta } = useProjects();
+   const { getProject, setProject, project, handleModalFormTask, alerta, submitTareasProyecto } =
+      useProjects();
 
    useEffect(() => {
       setProject({});
       getProject(params.id);
    }, []);
+
+   useEffect(() => {
+      socket = io(import.meta.env.VITE_BACKEND_URL);
+      socket.emit('abrir_proyecto', params.id);
+   }, []);
+
+   useEffect(() => {
+      socket.on('response', (response) => {
+         console.log(response);
+      });
+   });
+
+   useEffect(() => {
+      socket.on('taskAdded', (newTask) => {
+         if (newTask.proyecto === project._id) {
+            submitTareasProyecto(newTask);
+         }
+      });
+   });
 
    const isOwnerToProject = useAdmin();
 
