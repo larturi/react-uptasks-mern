@@ -36,12 +36,6 @@ const Project = () => {
    }, []);
 
    useEffect(() => {
-      socket.on('response', (response) => {
-         // console.log(response);
-      });
-   });
-
-   useEffect(() => {
       socket.on('taskAdded', (newTask) => {
          if (newTask.proyecto === project._id) {
             submitTareasProyecto(newTask);
