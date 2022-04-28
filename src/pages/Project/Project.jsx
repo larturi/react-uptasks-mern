@@ -7,15 +7,22 @@ import ModalFormTask from '../../components/Task/ModalFormTask';
 import ModalDeleteTask from '../../components/Task/ModalDeleteTask';
 import ModalDeleteCollaborator from '../../components/Collaborator/ModalDeleteCollaborator';
 import Task from '../../components/Task/Task';
-import Alert from '../../components/Alert';
 import Collaborator from '../../components/Collaborator/Collaborator';
 
 let socket;
 
 const Project = () => {
    const params = useParams();
-   const { getProject, setProject, project, handleModalFormTask, alerta, submitTareasProyecto } =
-      useProjects();
+   const {
+      getProject,
+      setProject,
+      project,
+      handleModalFormTask,
+      alerta,
+      submitTareasProyecto,
+      eliminarTareaProyecto,
+      editarTareaProyecto,
+   } = useProjects();
 
    useEffect(() => {
       setProject({});
@@ -29,7 +36,7 @@ const Project = () => {
 
    useEffect(() => {
       socket.on('response', (response) => {
-         console.log(response);
+         // console.log(response);
       });
    });
 
@@ -37,6 +44,18 @@ const Project = () => {
       socket.on('taskAdded', (newTask) => {
          if (newTask.proyecto === project._id) {
             submitTareasProyecto(newTask);
+         }
+      });
+
+      socket.on('taskDeleted', (deletedTask) => {
+         if (deletedTask.proyecto === project._id) {
+            eliminarTareaProyecto(deletedTask);
+         }
+      });
+
+      socket.on('taskEdited', (editedTask) => {
+         if (editedTask.proyecto._id === project._id) {
+            editarTareaProyecto(editedTask);
          }
       });
    });
