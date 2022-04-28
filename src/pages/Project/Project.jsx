@@ -22,6 +22,7 @@ const Project = () => {
       submitTareasProyecto,
       eliminarTareaProyecto,
       editarTareaProyecto,
+      completarTareaProyecto,
    } = useProjects();
 
    useEffect(() => {
@@ -56,6 +57,12 @@ const Project = () => {
       socket.on('taskEdited', (editedTask) => {
          if (editedTask.proyecto._id === project._id) {
             editarTareaProyecto(editedTask);
+         }
+      });
+
+      socket.on('taskCompleted', (completedTask) => {
+         if (completedTask.proyecto._id === project._id) {
+            completarTareaProyecto(completedTask);
          }
       });
    });

@@ -304,12 +304,10 @@ const ProjectsProvider = ({ children }) => {
       try {
          const config = getConfig();
          const { data } = await clientAxios.post(`/tasks/estado/${tareaId}`, {}, config);
-         const proyectosActualizado = { ...project };
-         proyectosActualizado.tareas = proyectosActualizado.tareas.map((tareaState) =>
-            tareaState._id === tareaId ? { ...tareaState, estado: data.estado } : tareaState
-         );
-         setProject(proyectosActualizado);
          mostrarAlerta({});
+
+         // Socket
+         socket.emit('completeTask', data);
       } catch (error) {
          console.error(error);
       }
@@ -354,6 +352,14 @@ const ProjectsProvider = ({ children }) => {
       setProject(proyectosActualizado);
    };
 
+   const completarTareaProyecto = (task) => {
+      const proyectosActualizado = { ...project };
+      proyectosActualizado.tareas = proyectosActualizado.tareas.map((tareaState) =>
+         tareaState._id === task._id ? { ...tareaState, estado: task.estado } : tareaState
+      );
+      setProject(proyectosActualizado);
+   };
+
    return (
       <ProjectsContext.Provider
          value={{
@@ -387,6 +393,8 @@ const ProjectsProvider = ({ children }) => {
             submitTareasProyecto,
             eliminarTareaProyecto,
             editarTareaProyecto,
+            completarTareaProyecto,
+            completarTareaProyecto,
          }}
       >
          {children}
