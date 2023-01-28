@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useProjects from '../../hooks/useProjects';
 import { useParams } from 'react-router-dom';
 import FormProject from '../../components/Project/FormProject';
-import { Modal, Button } from 'react-tailwind-modal';
+// import { Modal, Button } from 'react-tailwind-modal';
 
 const EditProject = () => {
    const params = useParams();
@@ -49,7 +49,7 @@ const EditProject = () => {
             </div>
          </div>
 
-         <Modal
+         {/* <Modal
             title='Eliminar Proyecto'
             show={show}
             setShow={setShow}
@@ -68,7 +68,7 @@ const EditProject = () => {
             }
          >
             <p>Estas seguro de eliminar el proyecto?</p>
-         </Modal>
+         </Modal> */}
 
          <div className='mt-10 flex justify-center'>
             <FormProject />
